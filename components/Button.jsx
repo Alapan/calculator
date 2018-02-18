@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 export default class Button extends React.Component {
   render() {
     return (
-      <button type="button"
-        className={this.props.isInput ? 'input' : 'action'}
+      <button type='button'
+        className='input'
         onClick={this.props.onClick}
       >{this.props.label}</button>
     );
@@ -13,7 +13,6 @@ export default class Button extends React.Component {
 }
 
 Button.propTypes = {
-  isInput: PropTypes.bool,
   onClick: PropTypes.func,
   label: PropTypes.string
 };

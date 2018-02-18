@@ -18826,9 +18826,13 @@ var _OutputField = __webpack_require__(34);
 
 var _OutputField2 = _interopRequireDefault(_OutputField);
 
-var _Button = __webpack_require__(35);
+var _Keypad = __webpack_require__(51);
 
-var _Button2 = _interopRequireDefault(_Button);
+var _Keypad2 = _interopRequireDefault(_Keypad);
+
+var _jquery = __webpack_require__(37);
+
+var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18844,23 +18848,62 @@ var Container = function (_React$Component) {
   function Container() {
     _classCallCheck(this, Container);
 
-    return _possibleConstructorReturn(this, (Container.__proto__ || Object.getPrototypeOf(Container)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Container.__proto__ || Object.getPrototypeOf(Container)).call(this));
+
+    _this.state = {
+      input: '0'
+    };
+    _this.onClick = _this.onClick.bind(_this);
+    _this.updateInputOperation = _this.updateInputOperation.bind(_this);
+    _this.calculateResult = _this.calculateResult.bind(_this);
+    _this.clearInputField = _this.clearInputField.bind(_this);
+    _this.userInput = '';
+    return _this;
   }
 
   _createClass(Container, [{
+    key: 'updateInputOperation',
+    value: function updateInputOperation(userInput) {
+      this.userInput = userInput;
+    }
+  }, {
+    key: 'calculateResult',
+    value: function calculateResult() {
+      this.setState({
+        result: eval(this.userInput).toString()
+      });
+    }
+  }, {
+    key: 'onClick',
+    value: function onClick(e) {
+      this.setState({
+        input: (0, _jquery2.default)(e.target).text()
+      });
+    }
+  }, {
+    key: 'clearInputField',
+    value: function clearInputField() {
+      this.userInput = '';
+      this.setState({
+        input: '',
+        result: ''
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         'div',
         { className: 'main-container' },
-        _react2.default.createElement(_InputField2.default, { input: '0' }),
-        _react2.default.createElement(_OutputField2.default, { result: '' }),
-        _react2.default.createElement(_Button2.default, {
-          isInput: false,
-          onClick: function onClick(e) {
-            return console.log(e);
-          },
-          label: '1'
+        _react2.default.createElement(_InputField2.default, {
+          input: this.state.input,
+          updateInputOperation: this.updateInputOperation
+        }),
+        _react2.default.createElement(_OutputField2.default, { result: this.state.result }),
+        _react2.default.createElement(_Keypad2.default, {
+          onClick: this.onClick,
+          calculateResult: this.calculateResult,
+          clearInputField: this.clearInputField
         })
       );
     }
@@ -18917,14 +18960,26 @@ var InputField = function (_React$Component) {
   _createClass(InputField, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (this.props.input !== nextProps.input) {
-        this.setState({ input: input });
+      if (nextProps.input) {
+        var updatedInput = this.state.input + ' ' + nextProps.input;
+        this.setState({
+          input: updatedInput
+        });
+        this.props.updateInputOperation(updatedInput);
+      } else {
+        this.setState({
+          input: ''
+        });
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('input', { type: 'text', value: this.state.input });
+      return _react2.default.createElement('input', {
+        type: 'text',
+        value: this.state.input,
+        placeholder: '0'
+      });
     }
   }]);
 
@@ -18935,7 +18990,8 @@ exports.default = InputField;
 
 
 InputField.propTypes = {
-  input: _propTypes2.default.string
+  input: _propTypes2.default.string,
+  updateInputOperation: _propTypes2.default.func.isRequired
 };
 
 /***/ }),
@@ -18985,13 +19041,16 @@ var OutputField = function (_React$Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (this.props.result !== nextProps.result) {
-        this.setState({ result: result });
+        this.setState({
+          result: nextProps.result
+        });
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('input', { type: 'text',
+      return _react2.default.createElement('input', {
+        type: 'text',
         value: this.state.result
       });
     }
@@ -19051,7 +19110,7 @@ var Button = function (_React$Component) {
       return _react2.default.createElement(
         'button',
         { type: 'button',
-          className: this.props.isInput ? 'input' : 'action',
+          className: 'input',
           onClick: this.props.onClick
         },
         this.props.label
@@ -19066,9 +19125,106 @@ exports.default = Button;
 
 
 Button.propTypes = {
-  isInput: _propTypes2.default.bool,
   onClick: _propTypes2.default.func,
   label: _propTypes2.default.string
+};
+
+/***/ }),
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Button = __webpack_require__(35);
+
+var _Button2 = _interopRequireDefault(_Button);
+
+var _propTypes = __webpack_require__(7);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Keypad = function (_React$Component) {
+  _inherits(Keypad, _React$Component);
+
+  function Keypad() {
+    _classCallCheck(this, Keypad);
+
+    return _possibleConstructorReturn(this, (Keypad.__proto__ || Object.getPrototypeOf(Keypad)).apply(this, arguments));
+  }
+
+  _createClass(Keypad, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '0' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '1' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '2' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '3' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '4' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '5' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '6' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '7' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '8' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '9' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '.' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '+' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '-' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '*' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '/' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: '(' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.onClick, label: ')' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.clearInputField, label: 'CL' }),
+        _react2.default.createElement(_Button2.default, { onClick: this.props.calculateResult, label: '=' })
+      );
+    }
+  }]);
+
+  return Keypad;
+}(_react2.default.Component);
+
+exports.default = Keypad;
+
+
+Keypad.propTypes = {
+  onClick: _propTypes2.default.func.isRequired,
+  clearInputField: _propTypes2.default.func.isRequired,
+  calculateResult: _propTypes2.default.func.isRequired
 };
 
 /***/ })

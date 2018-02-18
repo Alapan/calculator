@@ -11,13 +11,16 @@ export default class OutputField extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.result !== nextProps.result) {
-      this.setState({ result });
+      this.setState({
+        result: nextProps.result
+      });
     }
   }
 
   render() {
     return (
-      <input type="text"
+      <input
+        type="text"
         value={this.state.result}
       />
     );
