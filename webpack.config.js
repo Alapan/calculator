@@ -7,7 +7,8 @@ module.exports = {
     vendor: [
       'jquery',
       'bootstrap',
-      'react'
+      'react',
+      'lodash'
     ]
   },
   output: {
