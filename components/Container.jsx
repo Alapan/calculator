@@ -1,6 +1,5 @@
 import React from 'react';
-import InputField from './InputField.jsx';
-import OutputField from './OutputField.jsx';
+import Display from './Display.jsx';
 import Keypad from './Keypad.jsx';
 import $ from 'jquery';
 
@@ -8,7 +7,8 @@ export default class Container extends React.Component {
   constructor() {
     super();
     this.state = {
-      input: '0'
+      input: '',
+      output: ''
     };
     this.onClick = this.onClick.bind(this);
     this.updateInputOperation = this.updateInputOperation.bind(this);
@@ -23,7 +23,7 @@ export default class Container extends React.Component {
 
   calculateResult() {
     this.setState({
-      result: eval(this.userInput).toString()
+      output: eval(this.userInput).toString()
     });
   }
 
@@ -37,18 +37,18 @@ export default class Container extends React.Component {
     this.userInput = '';
     this.setState({
       input: '',
-      result: ''
+      output: '0'
     });
   }
 
   render() {
     return (
       <div className="main-container">
-        <InputField
+        <Display
           input={this.state.input}
           updateInputOperation={this.updateInputOperation}
+          output={this.state.output}
         />
-        <OutputField result={this.state.result} />
         <Keypad
           onClick={this.onClick}
           calculateResult={this.calculateResult}
