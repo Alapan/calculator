@@ -31,7 +31,7 @@ export default class Keypad extends React.Component {
 }
 
 Keypad.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  clearInputField: PropTypes.func.isRequired,
-  calculateResult: PropTypes.func.isRequired
+  onClick: PropTypes.func,
+  clearInputField: PropTypes.func,
+  calculateResult: PropTypes.func
 }
