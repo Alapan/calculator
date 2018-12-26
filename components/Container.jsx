@@ -1,64 +1,46 @@
 import React from 'react';
 import Display from './Display.jsx';
 import Keypad from './Keypad.jsx';
+import { connect } from 'react-redux';
 import $ from 'jquery';
 
-function isNumericInput(input) {
-  return input.match(/^\d*\.?\d*$/);
+function mapStateToProps (state) {
+  return {
+    input: state.input,
+    output: state.output
+  }
 }
 
-export default class Container extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      input: '',
-      output: '0'
-    };
-    this.onClick = this.onClick.bind(this);
-    this.calculateResult = this.calculateResult.bind(this);
-    this.clearInputField = this.clearInputField.bind(this);
-  }
-
-  calculateResult() {
-    this.setState({
-      input: '',
-      output: eval(this.state.input).toString()
-    });
-  }
-
-  onClick(e) {
-    let input = $(e.target).text();
-    // If input is number, no space, otherwise 1 space
-    // between characters
-    if (isNumericInput(input)) {
-      input = `${this.state.input}${input}`;
-    } else {
-      input = `${this.state.input} ${input} `;
+function mapDispatchToProps (dispatch) {
+  return {
+    onClick: (e) => {
+      dispatch({ type: 'CLICK_BUTTON', val: $(e.target).text() })
+    },
+    calculateResult: () => {
+      dispatch({ type: 'CALCULATE_RESULT' })
+    },
+    clearInputField: () => {
+      dispatch({ type: 'CLEAR_DISPLAY' })
     }
-
-    this.setState({ input });
   }
+}
 
-  clearInputField() {
-    this.setState({
-      input: '',
-      output: '0'
-    });
-  }
-
+class Container extends React.Component {
   render() {
     return (
       <div className="main-container">
         <Display
-          input={this.state.input}
-          output={this.state.output}
+          input={this.props.input}
+          output={this.props.output}
         />
         <Keypad
-          onClick={this.onClick}
-          calculateResult={this.calculateResult}
-          clearInputField={this.clearInputField}
+          onClick={this.props.onClick}
+          calculateResult={this.props.calculateResult}
+          clearInputField={this.props.clearInputField}
         />
       </div>
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Container);
