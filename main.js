@@ -19,7 +19,7 @@ function createWindow() {
 
   win.on('close', () => {
   	win = null;
-  })
+  });
 }
 
 app.on('ready', createWindow);
